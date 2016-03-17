@@ -1,0 +1,150 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html lang="uk">
+
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Система шифрування і дешифрування</title>
+		<meta name="description"
+			  value="Система шифрквання і дешифрування" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<!-- Style Section -->
+		<!-- <link rel="stylesheet"
+			  href="https://cdn.jsdelivr.net/bootstrap/3.3.0/css/bootstrap.min.css" > -->
+		<link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}" >
+
+		<link rel="stylesheet" href="{% static "css/main.css" %}" />
+
+	</head>
+
+	<body>
+		<!-- Start Container -->
+		<div class="container">
+
+			<!-- Start Legend -->
+			<div class="row" id="header">
+				<div class="col-xs-12">
+					<h1>Сервіс шифрування-дешифрування</h1>
+
+                    <div class="well">
+                        <p>Шифрування і зворотній процес, дешифрування, проводиться шифром Цезаря (ROTN).
+					    N - кількість зсувів літери абетки в порядку зростання. Даний сервіс дозволяє проводити
+						шифрування латиниці.
+					    </p>
+                        <p>Зліва введіть ваш текст для роботи. Далі в полі ROT введіть зміщення. І натисніть
+                        кнопку "Зашифрувати" або "Розшифрувати". В полі справа з’явиться зашифрований або
+                            розрифрований текст.</p>
+                    </div>
+				</div>
+			</div>
+			<!-- End Legend -->
+
+            <!-- Start InputOutputField -->
+			<div class="row" id="form-in-out" enctype="multipart/form-data">
+				<form action="{% url 'index' %}" method="post">
+					<div class="col-xs-5">
+                        <label for="input-text" class="control-label">Текст для шифрування/дешифрування</label>
+						<textarea name="input-text" id="input-text" rows="10" class="form-control"
+								  placeholder="Введіть текст для шифрування/дешифрування"></textarea>
+					</div>
+					<div class="col-xs-2" id="buttons">
+						<div class="input-group input-group-sm">
+						  <span for="rot" class="input-group-addon" id=sizing-addon3">ROT</span>
+						  <input type="text" class="form-control" placeholder="N"
+								 value="" name="rot" id="rot"
+								 aria-describedby="sizing-addon3">
+						</div>
+						<input type="submit" value="Зашифрувати" name="crypt"
+							   class="btn btn-danger btn-sm"/>
+						<input type="submit" value="Розшифрувати" name="encrypt"
+							   class="btn btn-success btn-sm"/>
+					</div>
+					<div class="col-xs-5">
+                        <label for="input-text" class="control-label">Результат</label>
+						<textarea readonly="readonly" name="output-text" id="output-text" rows="10" class="form-control"
+								  placeholder="Результат"></textarea>
+					</div>
+				</form>
+			</div>
+            <!-- End InputOutputField -->
+
+			<!-- Start Chart -->
+			<div class="row" id="frequency-diagram">
+				<div class="col-xs-12">
+                    <div id="chart_div"></div>
+				</div>
+			</div>
+			<!-- End Chart -->
+
+            <!-- Start InfoMessage -->
+			<div class="row" id="info-msg">
+				<div class="col-xs-12">
+
+                    <div class="alert alert-info">
+                        <strong>Info!</strong> Порада стосовно шифрування.
+                    </div>
+				</div>
+			</div>
+			<!-- End InfoMessage -->
+
+			<!-- Start Footer -->
+			<div class="row" id="footer">
+				<div class="col-xs-12">
+					&copy; 2016 Шифрування і дешифрування Цезаря
+				</div>
+			</div>
+			<!-- End Footer -->
+
+		</div>
+		<!-- End Container -->
+
+		<!-- JavaScript Section -->
+		<!-- <script src="https://cdn.jsdelivr.net/bootstrap/3.3.0/js/bootstrap.min.js"></script> -->
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+        <script src="https://www.google.com/jsapi" type="text/javascript"></script>
+        <script src="{% static 'js/ajaxGetPost.js' %}" type="text/javascript"></script>
+        <script>
+        function charts(data,ChartType){
+            var c=ChartType;
+            var jsonData=data;
+            google.load("visualization", "1", {packages:["corechart"], callback: drawVisualization});
+            function drawVisualization(){
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Літера');
+                data.addColumn('number', 'Кількіть літер');
+                $.each(jsonData, function(i,jsonData)
+                {
+                var value=jsonData.value;
+                var name=jsonData.name;
+                data.addRows([ [name, value]]);
+                });
+
+                var options = {
+                title : "Частота літер у введеному тексті:",
+                colorAxis: {colors: ['#54C492', '#cc0000']},
+                datalessRegionColor: '#dedede',
+                defaultColor: '#dedede'
+                };
+
+                var chart;
+                if(c=="ColumnChart")
+                    chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+
+                chart.draw(data, options);
+            }
+        }
+
+        $(document).ready(function (){
+            url='{% static "js/world-population-density.json" %}';
+            ajax_data('GET',url, function(data){
+                charts(data,"ColumnChart");
+            });
+        });
+
+        </script>
+	</body>
+
+</html>

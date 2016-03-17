@@ -1,0 +1,41 @@
+h1,h2,h3 {
+    font-weight: bold;
+}
+
+#footer {
+	border-top: 1px solid #dddddd;
+	padding-top: 10px;
+}
+
+#header {
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 10px;
+}
+
+.input-group-sm {
+    width: 100px;
+    text-align: center;
+    margin: 10px auto 10px;
+}
+
+#buttons {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    vertical-align: middle !important;
+	text-align: center;
+    margin: 0 auto;
+}
+
+.btn-sm{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#label-rot{
+    padding: 6px 20px 6px 12px  !important;
+    border: 1px !important;
+}
+
+#chart_div {
+    margin-top: 20px;
+}

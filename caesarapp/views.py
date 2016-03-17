@@ -1,3 +1,7 @@
 from django.shortcuts import render
 
-# Create your views here.
+def index(request):
+    return render(request, 'index.html', {})
+
+def diagr(request):
+    return render(request, 'diagr.html', {})
