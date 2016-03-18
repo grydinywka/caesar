@@ -1,20 +1,37 @@
-$(document).ready(function (){
-    var pageLink = $('#info-msg');
+function ajax_data_post_json() {
+    var form = $('form');
 
-    pageLink.click(function(event){
+        form.ajaxForm({
+            dataType: "json",
+            'data': {
+                'custom_input': $('input[name="rot"]').val(), "FRUIT": "selected"
+            },
+            'beforeSend': function() {
 
-        $.ajax({
-            'url': '/diagr2/',
-            'dataType': "json",
-            'type': 'get',
-            'success': function(data, status, xhr){
-                var html = $(data);
+            },
+			'error': function(){
+				alert('Error on server. Attempt later, please!');
 
-                $('#info-msg div div').append($('#footer div').text());
-                $('#info-msg div div').append(data.code);
-            }
+				return false;
+			},
+			'success': function(data, status, xhr){
+                if ('crypt' in data) {
+                    $("#result-field").html('Результат: Зашифрований текст');
+                } else if ('encrypt' in data) {
+                    $("#result-field").html('Результат: Розшифрований текст');
+                }
+
+                $("textarea[name='output-text']").html(data.output_text);
+//                $('textarea').attr('value', data.output_text);
+			}
         });
+}
 
-        return false;
-    });
+$(document).ready(function (){
+//    $("input[name='crypt']").click(function() {
+//
+//
+//        return false;
+//    });
+    ajax_data_post_json();
 });
