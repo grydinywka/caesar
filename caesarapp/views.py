@@ -61,34 +61,54 @@ def encrypt(str, rot):
     return encrypted
 
 def index(request):
-    # Якщо форма була запощена:
     if request.method == "POST":
+        # take data from request
         data = request.POST
-
-        # Перевіряємо дані на коректність та збираємо помилки
+        # create dict for errors
         errors = {}
-       # Якщо дані були введені не коректно:
-            #Віддаємо шаблон форми разом з помилками
+        # create dict for output data
+        result_dict = {}
+
+        # Validate input-text field
+        input_text = data.has_key('input-text') and data["input-text"] or ''
+        if not input_text:
+            errors['input_text'] = u'Текст для шифрування/дешифрування є обов’язковим!'
+        else:
+            result_dict['input_text'] = data['input-text']
+
+        # Validate rotate field
+        # rot = data.get('rot', '').strip()
+        rot = data.has_key('rot') and data['rot'] or ''
+        if not rot:
+            errors['rot'] = u'Зміщення є обов’язковим!'
+        # elif date is not integer or is not number
+        else:
+            try:
+                rot = int(rot)
+            except Exception:
+                errors['rot'] = u'Невірне значення зміщення! Введіть ціле число!'
+            result_dict['rot'] = rot
+
+        result_dict["output_text"] = ''
+
         if not errors:
-            rotn = int(data['rot']) % 26
-        # Якщо дані були введені коректно:
-            if request.POST.get("crypt") is not None:
+            rotn = rot % 26
+            output_text = ''
+
+            if data.has_key("crypt") and data["crypt"] is not None:
                 output_text = crypt(data['input-text'], rotn)
-            elif request.POST.get("encrypt") is not None:
-                output_text = encrypt(data['input-text'], rotn)
-                # pass
-            result_dict = {"input-text": str(data['input-text']),	"rot": data['rot'],
-                           "output_text": output_text}
-            if ( data.has_key("crypt") ):
                 result_dict["crypt"] = data['crypt']
-            elif ( data.has_key("encrypt") ):
+            elif data.has_key("encrypt") and data["encrypt"] is not None:
+                output_text = encrypt(data['input-text'], rotn)
                 result_dict["encrypt"] = data['encrypt']
-            # Формуємо JSON Відповідь і повертаємо форму, в яку розміщуємо вихідні данні і шифр
-            return JsonResponse(result_dict,
-                                safe=False)
-            # return HttpResponse('<h1>{0}!</h1>'.format(request.POST['input-text']))
+
+            result_dict["output_text"] = output_text
+
+            return JsonResponse(result_dict, safe=False)
         else: # if there are errors
-            return render(request, 'index.html', {'errors': errors})
+            result_dict["errors"] = errors
+
+            return JsonResponse(result_dict, safe=False)
     else: # if there is not POST
         return render(request, 'index.html', {})
 

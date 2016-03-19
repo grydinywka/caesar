@@ -19,8 +19,8 @@ h1,h2,h3 {
 }
 
 #buttons {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     vertical-align: middle !important;
 	text-align: center;
     margin: 0 auto;
@@ -38,4 +38,8 @@ h1,h2,h3 {
 
 #chart_div {
     margin-top: 20px;
+}
+
+#status_msg {
+    display: none;
 }
