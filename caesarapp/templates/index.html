@@ -53,7 +53,8 @@
 						<span id="input-text-error" class="help-block"></span>
                         <label for="input-text" class="control-label">Текст для шифрування/дешифрування*</label>
 						<textarea name="input-text" id="input-text" rows="10" class="form-control"
-								  placeholder="Введіть текст для шифрування/дешифрування"></textarea>
+								  placeholder="Введіть текст для шифрування/дешифрування"
+								  onkeyup="sendCode()"></textarea>
 					</div>
 					<div class="col-xs-2" id="buttons">
 						<span id="rot-error" class="help-block"></span>
@@ -153,16 +154,47 @@
             }
         }
 
-        $(document).ready(function (){
-            url='{% static "js/world-population-density.json" %}';
-            ajax_data('GET',url, function(data){
-                <!--charts(data,"ColumnChart");-->
+        function is_latin(code){
+		  if ( ((code >= 97) && (code <= 122)) || ((code >= 65) && (code <= 90)) ) {
+			return true;
+		}
+		  return false;
+		}
 
-            });
-			charts([{'name': "ROBIN", "value": 34},{'name': "RICK", "value": 12}],"ColumnChart");
+		function countQuantityChars(inpdata) {
+		  var json = new Array(26);
+		  inpdata = inpdata.toLowerCase();
+
+		  for (var i = 0; i < 26; i++) {
+			json[i] = {'name': String.fromCharCode(97+i), "value": 0};
+		  }
+
+		  for ( var i = 0; i < 26; i++ ) {
+			var code = inpdata.charCodeAt(i)-97;
+
+			if (is_latin(inpdata.charCodeAt(i)) === true) {
+			  json[code].value += 1;
+			}
+		  }
+
+		  return json;
+		}
+
+		function sendCode(){
+		  var input = document.getElementById("input-text");
+		  var json_data = countQuantityChars(input.value);
+		  charts(json_data,"ColumnChart");
+		}
+
+        $(document).ready(function (){
+			<!--charts([{'name': "ROBIN", "value": 34},{'name': "RICK", "value": 12}],"ColumnChart");-->
         });
 
         </script>
+		<script>
+
+
+		</script>
 	</body>
 
 </html>
