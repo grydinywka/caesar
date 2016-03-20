@@ -53,7 +53,6 @@ function ajax_data_post_json() {
                 }
 
                 $("textarea[name='output-text']").html(data.output_text);
-//                $('textarea').attr('value', data.output_text);
 			}
         });
 }
@@ -67,15 +66,16 @@ function charts(data,ChartType){
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Літера');
         data.addColumn('number', 'Кількіть літер');
-        $.each(jsonData, function(i,jsonData)
-        {
-        var value=jsonData.value;
-        var name=jsonData.name;
-        data.addRows([ [name, value]]);
+        $.each(jsonData, function(i,jsonData){
+            if (jsonData != undefined) {
+                var value=jsonData.value;
+                var name=jsonData.name;
+                data.addRows([ [name, value]]);
+            }
         });
 
         var options = {
-        title : "Частота літер латиниці введеного тексту. Літери верхнього регістру прирівнюються до літер нижнього!",
+        title : "Частота кожного символу в тексті.",
         colorAxis: {colors: ['#54C492', '#cc0000']},
         datalessRegionColor: '#dedede',
         defaultColor: '#dedede'
@@ -97,7 +97,7 @@ function is_latin(code){
     return false;
 }
 
-function countQuantityChars(inpdata) {
+function countQuantityLatin(inpdata) {
     var lenLatin = 26;
     var json = new Array(lenLatin);
     var len_data = inpdata.length;
@@ -114,6 +114,30 @@ function countQuantityChars(inpdata) {
         var code = inpdata.charCodeAt(i)-97;
 
         if (is_latin(inpdata.charCodeAt(i)) === true) {
+            json[code].value += 1;
+        }
+    }
+
+  return json;
+}
+
+function countQuantityChars(inpdata) {
+    var json = [];
+    var len_data = inpdata.length;
+
+//    Counting value of every char of input data
+    for ( var i = 0; i < len_data; i++ ) {
+        var code = inpdata.charCodeAt(i);
+
+        if (json[code] === undefined) {
+            if (code === 10) {
+                json[10] = {'name': "\\n", "value": 1};
+            } else if (code === 32) {
+                json[32] = {'name': "' '", "value": 1};
+            } else {
+                json[code] = {'name': inpdata[i], "value": 1};
+            }
+        } else {
             json[code].value += 1;
         }
     }
