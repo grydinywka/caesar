@@ -19,8 +19,6 @@ from django.contrib import admin
 urlpatterns = patterns('',
     # index page
     url(r'^$', 'caesarapp.views.index', name='index'),
-    url(r'^diagr/$', 'caesarapp.views.diagr', name='diagram'),
-    url(r'^diagr2/$', 'caesarapp.views.data_response', name='data_response'),
 
     # admin page
     url(r'^admin/', include(admin.site.urls)),

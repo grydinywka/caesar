@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.core.urlresolvers import reverse
-from django.core import serializers
-import json
+from django.http import JsonResponse
 
 def is_alpha(c):
     c = ord(c)
@@ -20,15 +17,16 @@ def is_upper(c):
     return False # If ord('a') <= ord(c) and ord(c) <= ord('z')
 
 def shift(c, rot, limit, isCrypte):
+    lenLatin = 26
     c = ord(c)
     if (isCrypte):
         shift_res = c + rot
         if ( shift_res > limit ):
-            shift_res -= 26
+            shift_res -= lenLatin
     else:
         shift_res = c - rot
         if ( shift_res < limit ):
-            shift_res += 26
+            shift_res += lenLatin
     return chr(shift_res)
 
 def crypt(str, rot):
@@ -77,7 +75,6 @@ def index(request):
             result_dict['input_text'] = data['input-text']
 
         # Validate rotate field
-        # rot = data.get('rot', '').strip()
         rot = data.has_key('rot') and data['rot'] or ''
         if not rot:
             errors['rot'] = u'Зміщення є обов’язковим!'
@@ -92,7 +89,7 @@ def index(request):
         result_dict["output_text"] = ''
 
         if not errors:
-            rotn = rot % 26
+            rotn = rot % 26 # 26 - length of latin alphabet
             output_text = ''
 
             if data.has_key("crypt") and data["crypt"] is not None:
@@ -111,10 +108,3 @@ def index(request):
             return JsonResponse(result_dict, safe=False)
     else: # if there is not POST
         return render(request, 'index.html', {})
-
-def diagr(request):
-    return render(request, 'diagr.html', {})
-
-def data_response(request):
-    new_http_request = {"code": "GrateBritain", "value": 34, "name": "a"}
-    return JsonResponse(new_http_request, safe=False)
