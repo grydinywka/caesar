@@ -54,7 +54,7 @@
                         <label for="input-text" class="control-label">Текст для шифрування/дешифрування*</label>
 						<textarea name="input-text" id="input-text" rows="10" class="form-control"
 								  placeholder="Введіть текст для шифрування/дешифрування"
-								  onkeyup="sendCode()"></textarea>
+								  onkeyup="beginChart()"></textarea>
 					</div>
 					<div class="col-xs-2" id="buttons">
 						<span id="rot-error" class="help-block"></span>
@@ -114,87 +114,11 @@
 		<!-- End Container -->
 
 		<!-- JavaScript Section -->
-		<!-- <script src="https://cdn.jsdelivr.net/bootstrap/3.3.0/js/bootstrap.min.js"></script> -->
-		<script src="{% static 'js/bootstrap.min.js' %}"></script>
-		<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>-->
-        <script src="{% static 'js/jquery.js' %}"></script>
-        <!--<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>-->
-        <script src="{% static 'js/jquery.form.min.js' %}"></script>
+		<script src="https://cdn.jsdelivr.net/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
         <script src="https://www.google.com/jsapi" type="text/javascript"></script>
-        <script src="{% static 'js/ajaxGetPost.js' %}" type="text/javascript"></script>
         <script src="{% static 'js/main.js' %}" type="text/javascript"></script>
-        <script>
-        function charts(data,ChartType){
-            var c=ChartType;
-            var jsonData=data;
-            google.load("visualization", "1", {packages:["corechart"], callback: drawVisualization});
-            function drawVisualization(){
-                var data = new google.visualization.DataTable();
-                data.addColumn('string', 'Літера');
-                data.addColumn('number', 'Кількіть літер');
-                $.each(jsonData, function(i,jsonData)
-                {
-                var value=jsonData.value;
-                var name=jsonData.name;
-                data.addRows([ [name, value]]);
-                });
-
-                var options = {
-                title : "Частота літер у введеному тексті:",
-                colorAxis: {colors: ['#54C492', '#cc0000']},
-                datalessRegionColor: '#dedede',
-                defaultColor: '#dedede'
-                };
-
-                var chart;
-                if(c=="ColumnChart")
-                    chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-
-                chart.draw(data, options);
-            }
-        }
-
-        function is_latin(code){
-		  if ( ((code >= 97) && (code <= 122)) || ((code >= 65) && (code <= 90)) ) {
-			return true;
-		}
-		  return false;
-		}
-
-		function countQuantityChars(inpdata) {
-		  var json = new Array(26);
-		  inpdata = inpdata.toLowerCase();
-
-		  for (var i = 0; i < 26; i++) {
-			json[i] = {'name': String.fromCharCode(97+i), "value": 0};
-		  }
-
-		  for ( var i = 0; i < 26; i++ ) {
-			var code = inpdata.charCodeAt(i)-97;
-
-			if (is_latin(inpdata.charCodeAt(i)) === true) {
-			  json[code].value += 1;
-			}
-		  }
-
-		  return json;
-		}
-
-		function sendCode(){
-		  var input = document.getElementById("input-text");
-		  var json_data = countQuantityChars(input.value);
-		  charts(json_data,"ColumnChart");
-		}
-
-        $(document).ready(function (){
-			<!--charts([{'name': "ROBIN", "value": 34},{'name': "RICK", "value": 12}],"ColumnChart");-->
-        });
-
-        </script>
-		<script>
-
-
-		</script>
 	</body>
 
 </html>

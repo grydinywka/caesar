@@ -19,7 +19,7 @@ function ajax_data_post_json() {
                 var rotate_error = $('#rot-error');
 
                 if ('errors' in data) {
-                    $('#status_msg').show().html('Помилка валідації! Виправте введені данні.');
+                    $('#status_msg').show().html('Помилка валідації! Виправте їх!.');
                     if ('input_text' in data.errors) {
                         input_error.html(data.errors.input_text);
                         input_error.parent().addClass('has-error');
@@ -58,6 +58,80 @@ function ajax_data_post_json() {
         });
 }
 
+// Function for build chart
+function charts(data,ChartType){
+    var c=ChartType;
+    var jsonData=data;
+    google.load("visualization", "1", {packages:["corechart"], callback: drawVisualization});
+    function drawVisualization(){
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Літера');
+        data.addColumn('number', 'Кількіть літер');
+        $.each(jsonData, function(i,jsonData)
+        {
+        var value=jsonData.value;
+        var name=jsonData.name;
+        data.addRows([ [name, value]]);
+        });
+
+        var options = {
+        title : "Частота літер латиниці введеного тексту. Літери верхнього регістру прирівнюються до літер нижнього!",
+        colorAxis: {colors: ['#54C492', '#cc0000']},
+        datalessRegionColor: '#dedede',
+        defaultColor: '#dedede'
+        };
+
+        var chart;
+        if(c=="ColumnChart")
+            chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+    }
+}
+
+// func for checking if it is latin char; 65 == 'A', 90 == 'Z', 97 == 'a', 122 == 'z'
+function is_latin(code){
+    if ( ((code >= 97) && (code <= 122)) || ((code >= 65) && (code <= 90)) ) {
+        return true;
+    }
+    return false;
+}
+
+function countQuantityChars(inpdata) {
+    var lenLatin = 26;
+    var json = new Array(lenLatin);
+    var len_data = inpdata.length;
+
+    inpdata = inpdata.toLowerCase();
+
+//    dump default data in json = [{'name': 'a', 'value': 0},...,{'name': 'z', 'value': 0}]
+    for (var i = 0; i < lenLatin; i++) {
+        json[i] = {'name': String.fromCharCode(97+i), "value": 0};
+    }
+
+//    Counting value of every letter of input data
+    for ( var i = 0; i < len_data; i++ ) {
+        var code = inpdata.charCodeAt(i)-97;
+
+        if (is_latin(inpdata.charCodeAt(i)) === true) {
+            json[code].value += 1;
+        }
+    }
+
+  return json;
+}
+
+function beginChart(){
+    var input = document.getElementById("input-text");
+    var json_data = countQuantityChars(input.value);
+
+    charts(json_data,"ColumnChart");
+}
+
 $(document).ready(function (){
     ajax_data_post_json();
+    charts(data,ChartType);
+    is_latin(code);
+    countQuantityChars(inpdata);
+    sendCode();
 });
