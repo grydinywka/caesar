@@ -29,14 +29,20 @@
 
                     <div class="well">
                         <p>Шифрування і зворотній процес, дешифрування, проводиться шифром Цезаря (ROTN).
-					    N - зміщення, ціле число. Даний сервіс дозволяє проводити
+					    <span class="important">N</span> - зміщення, <span class="important">ціле</span> число.
+							Даний
+							сервіс дозволяє проводити
 						шифрування латиниці. Інші символи лишаються без змін.
 					    </p>
                         <p>Зліва введіть ваш текст для роботи. Далі в полі ROT введіть зміщення. І натисніть
                         кнопку "Зашифрувати" або "Розшифрувати". В полі справа з’явиться зашифрований або
                             розрифрований текст.</p>
-						<p>Під час введення тексту з’явиться діаграма що покаже кількість кожного введеного символу у
-							тексті.</p>
+						<p>Після введення тексту і <span class="important">дефокусування</span> з’явиться
+							діаграма, що
+							покаже кількісну характеристику
+							кожного	введеного символу у	тексті. Якщо текст зашифрований - під діаграмою з’явиться
+							поле з імовірним зміщенням в якому зашифрований текст.
+						</p>
                     </div>
 				</div>
 			</div>
@@ -51,15 +57,14 @@
 						<span id="input-text-error" class="help-block"></span>
                         <label for="input-text" class="control-label">Текст для шифрування/дешифрування*</label>
 						<textarea name="input-text" id="input-text" rows="10" class="form-control"
-								  placeholder="Введіть текст для шифрування/дешифрування"
-								  onkeyup="beginChart()"></textarea>
+								  placeholder="Введіть текст для шифрування/дешифрування"></textarea>
 					</div>
 
 					<div class="col-xs-2" id="buttons">
 						<span id="rot-error" class="help-block"></span>
 						<div><label for="rot" class="control-label">Зміщення*</label></div>
 						<div class="input-group input-group-sm">
-							<span for="rot" class="input-group-addon" id=sizing-addon3">ROT*</span>
+							<span for="rot" class="input-group-addon sizing-addon3">ROT*</span>
 							<input type="text" class="form-control" placeholder="N"
 								 value="" name="rot" id="rot"
 								 aria-describedby="sizing-addon3">
@@ -84,9 +89,6 @@
 			<div class="row" id="frequency-diagram">
 				<div class="col-xs-12">
                     <div id="chart_div"></div>
-				</div>
-				<div class="col-xs-12">
-                    <div id="chart_div2"></div>
 				</div>
 			</div>
 			<!-- End Chart -->

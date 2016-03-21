@@ -3,9 +3,6 @@ function ajax_data_post_json() {
 
         form.ajaxForm({
             dataType: "json",
-            'data': {
-                'custom_input': $('input[name="rot"]').val(), "FRUIT": "selected"
-            },
             'beforeSend': function() {
 
             },
@@ -70,7 +67,7 @@ function charts(data,ChartType){
             if (jsonData != undefined) {
                 var value=jsonData.value;
                 var name=jsonData.name;
-                data.addRows([ [name, value]]);
+                data.addRows([[name, value]]);
             }
         });
 
@@ -89,7 +86,7 @@ function charts(data,ChartType){
     }
 }
 
-function countQuantityChars(inpdata) {
+function countChars(inpdata) {
     var json = [];
     var len_data = inpdata.length;
 
@@ -113,13 +110,57 @@ function countQuantityChars(inpdata) {
   return json;
 }
 
-function beginChart(){
-    var input = document.getElementById("input-text");
-    var json_data = countQuantityChars(input.value);
+function ajax_eng_words(type, url, success){
+    $.ajax({
+        type:type,
+        url:url,
+        dataType:"text",
+        restful:true,
+        cache:false,
+        timeout:20000,
+        async:true,
+        beforeSend :function(data) { },
+        success:function(data){
+            success.call(this, data);
+        },
+        error:function(data){
+            alert("Error In Connecting");
+            return false;
+        }
+    });
+}
 
-    charts(json_data,"ColumnChart");
+function test(data) {
+    alert(data);
+}
+
+function stripchars(string) {
+    string = string.replace(RegExp('[^a-z ]','g'), ' ');
+    string = string.replace(RegExp(' {2,}','g'), ' ');
+    return string;
+}
+
+function infoMessage(textdata) {
+    url='http://127.0.0.1:8000/static/txt/wordsEn.txt';
+    ajax_eng_words('GET',url, function(data){
+        var wordsEn = data.split('\n');
+        var inpdata = textdata.toLowerCase(); //
+        inpdata = stripchars(inpdata); // delete all chars exclude latins and spaces
+        inpdata = inpdata.split(' ');
+
+        test(inpdata);
+        $('#info-msg div div').html(wordsEn.length);
+        $('#info-msg').show();
+    });
 }
 
 $(document).ready(function (){
     ajax_data_post_json();
+    $('#input-text').focusout(function() {
+        var input = document.getElementById("input-text");
+        var json_data = countChars(input.value);
+
+        charts(json_data,"ColumnChart");
+        infoMessage(input.value);
+    });
 });
