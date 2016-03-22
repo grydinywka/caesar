@@ -153,7 +153,7 @@ function encrypt(str, rot) { // this func is only for the file
 }
 
 function infoMessage(textdata) { // textdata - data from input field
-    url='http://127.0.0.1:8000/static/txt/wordsEn.txt';
+    url='/static/txt/wordsEn.txt';
     ajax_eng_words('GET',url, function(data){ // data - string of English words
 
         var inpdata = textdata.toLowerCase(); //
