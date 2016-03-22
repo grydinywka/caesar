@@ -172,7 +172,7 @@ function infoMessage(textdata) { // textdata - data from input field
                 counter += 1;
         }
         if (inpdata == '')
-            inpdata.length = -1;
+            counter = -1;
 
         if (counter == inpdata.length) {
             $('#info-msg div div').html('<p>Введений текст незашифрований! Кожне слово міститься в англійському\
