@@ -83,6 +83,7 @@ function charts(data,ChartType){
             chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
 
         chart.draw(data, options);
+        $('#frequency-diagram').show();
     }
 }
 
@@ -130,37 +131,97 @@ function ajax_eng_words(type, url, success){
     });
 }
 
-function test(data) {
-    alert(data);
-}
-
 function stripchars(string) {
     string = string.replace(RegExp('[^a-z ]','g'), ' ');
     string = string.replace(RegExp(' {2,}','g'), ' ');
+    string = string.replace(RegExp('^ ','g'), '');
+    string = string.replace(RegExp(' $','g'), '');
     return string;
 }
 
-function infoMessage(textdata) {
-    url='http://127.0.0.1:8000/static/txt/wordsEn.txt';
-    ajax_eng_words('GET',url, function(data){
-        var wordsEn = data.split('\n');
-        var inpdata = textdata.toLowerCase(); //
-        inpdata = stripchars(inpdata); // delete all chars exclude latins and spaces
-        inpdata = inpdata.split(' ');
+function encrypt(str, rot) { // this func is only for the file
+    var encrypted = "";
 
-        test(inpdata);
-        $('#info-msg div div').html(wordsEn.length);
+    for (var i = 0; i < str.length; i++) {
+        var shift = str.charCodeAt(i) - rot;
+        if ( shift < 97 )
+            shift += 26;
+        encrypted += String.fromCharCode(shift);
+    }
+
+    return encrypted;
+}
+
+function infoMessage(textdata) { // textdata - data from input field
+    url='http://127.0.0.1:8000/static/txt/wordsEn.txt';
+    ajax_eng_words('GET',url, function(data){ // data - string of English words
+
+        var inpdata = textdata.toLowerCase(); //
+
+        inpdata = stripchars(inpdata); // delete all chars exclude latins and spaces
+        inpdata = inpdata.split(' '); // array of input words
+        if ( inpdata.length > 200)
+            inpdata.length = 200
+
+//--------------------------------------------------------------------
+// Check if input data is valid words
+        var counter = 0;
+        for ( var i = 0; i < inpdata.length; i++ ) {
+            var patt = new RegExp('\\s'+inpdata[i]+'\\s', 'g');
+            if ( patt.test(data) )
+                counter += 1;
+        }
+        if (inpdata == '')
+            inpdata.length = -1;
+
+        if (counter == inpdata.length) {
+            $('#info-msg div div').html('<p>Введений текст незашифрований! Кожне слово міститься в англійському\
+            словнику.</p>');
+        } else {
+            var flagRot = 0;
+            for ( var rot = 1; rot < 26; rot++ ) { // rot = i
+                var counter2 = 0;
+                for ( var i = 0; i < inpdata.length; i++ ) {
+                    var word = encrypt(inpdata[i], rot);
+                    var patt = new RegExp('\\s'+word+'\\s', 'g');
+
+                    if ( patt.test(data) )
+                        counter2 += 1;
+                }
+
+                if (counter2 == inpdata.length) { // if encrypted is in Eng dict
+                    flagRot = rot;
+                    rot = 26; // exit from loop
+                }
+            }
+
+            if ( flagRot != 0 ) {
+                $('#info-msg div div').html('Введений текст Зашифрований в ROT ' + flagRot );
+            } else {
+                $('#info-msg div div').html('Введений текст або містись помилки, або зашифрований не шифром Цезаря,\
+                або деякі слова не є словами англійської мови, або містить власні назви!');
+            }
+        }
         $('#info-msg').show();
+
     });
 }
 
+
 $(document).ready(function (){
     ajax_data_post_json();
+    $('#input-text').click(function(){
+        $('#info-msg').hide();
+//        $('#frequency-diagram').hide();
+
+        return false;
+    });
+
     $('#input-text').focusout(function() {
-        var input = document.getElementById("input-text");
-        var json_data = countChars(input.value);
+        var input = $("#input-text").val();
+        var json_data = countChars(input);
 
         charts(json_data,"ColumnChart");
-        infoMessage(input.value);
+        infoMessage(input);
     });
 });
