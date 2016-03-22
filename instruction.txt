@@ -1,0 +1,54 @@
+Працюємо під Linux. Відкриваємо термінал.
+
+$ wget https://bootstrap.pypa.io/get-pip.py
+
+$ sudo python get-pip.py
+
+$ sudo pip install virtualenv
+
+$ virtualenv caecar --no-site-packages
+
+$ cd caesar
+
+$ source bin/activate
+
+(caesar)$ pip install Django
+
+(caesar)$ mkdir src
+
+(caesar)$ cd src
+
+(caesar)$ git clone https://github.com/grydinywka/caesar.git
+
+(caesar)$ cd caesar
+
+(caesar)$ pip install -r requirements.txt
+
+(caesar)$ psql
+
+=# create database caesar_db;
+
+=# create user caesar_db_user with password 'caesar_db_user';
+
+(caesar)$ cd ../../bin
+
+(caesar)$ gedit activate
+
+add to end file next two lines:
+
+DJANGO_SETTINGS_MODULE="familiesdb.development_settings"
+export DJANGO_SETTINGS_MODULE'
+
+save file
+
+(caesar)$ deactivate
+
+$ activate
+
+(caesar)$ cd src/caesar/
+
+(caesar)$ python manage.py migrate
+
+(caesar)$ python manage.py runserver
+
+
