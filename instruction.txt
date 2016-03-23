@@ -31,6 +31,8 @@ open postgresql:
 
 =# create user caesar_db_user with password 'caesar_db_user';
 
+=# grant connect on database caesar_db to caesar_db_user;
+
 (caesar)$ cd ../../bin
 
 (caesar)$ gedit activate
@@ -38,13 +40,13 @@ open postgresql:
 add to end file next two lines:
 
 DJANGO_SETTINGS_MODULE="caesar.development_settings"
-export DJANGO_SETTINGS_MODULE'
+export DJANGO_SETTINGS_MODULE
 
 save file
 
 (caesar)$ deactivate
 
-$ activate
+$ source activate
 
 (caesar)$ cd src/caesar/
 
