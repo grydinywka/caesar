@@ -24,6 +24,7 @@ $ source bin/activate
 
 (caesar)$ pip install -r requirements.txt
 
+open postgresql:
 (caesar)$ psql
 
 =# create database caesar_db;
@@ -36,7 +37,7 @@ $ source bin/activate
 
 add to end file next two lines:
 
-DJANGO_SETTINGS_MODULE="familiesdb.development_settings"
+DJANGO_SETTINGS_MODULE="caesar.development_settings"
 export DJANGO_SETTINGS_MODULE'
 
 save file
