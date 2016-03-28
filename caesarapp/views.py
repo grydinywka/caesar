@@ -3,47 +3,43 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 
-def shift(c, rot, limit, isCrypte):
-    lenLatin = 26
+def is_alpha(c):
     c = ord(c)
+    if ord('A') <= c and c <= ord('Z'):
+        return True
+    if ord('a') <= c and c <= ord('z'):
+        return True
+    return False
+
+def shift(c, rot, isCrypte):
+    lenLatin = 26
     if (isCrypte):
-        shift_res = c + rot
+        if c.isupper():
+            limit = ord('Z')
+        else:
+            limit = ord('z')
+        shift_res = ord(c) + rot
         if ( shift_res > limit ):
             shift_res -= lenLatin
     else:
-        shift_res = c - rot
+        if c.isupper():
+            limit = ord('A')
+        else:
+            limit = ord('a')
+        shift_res = ord(c) - rot
         if ( shift_res < limit ):
             shift_res += lenLatin
     return chr(shift_res)
 
-def crypt(str, rot):
-    crypted = ''
+def allcrypt(str, rot, crypt=True):
+    result = ''
     for c in str:
-        if c.isalpha():
-            if c.isupper():
-                limit = ord('Z')
-            else:
-                limit = ord('z')
-            crypted += shift(c, rot, limit, True)
+        if is_alpha(c):
+            result += shift(c, rot, crypt)
         else:
-            crypted += c
-        pass
+            result += c
 
-    return crypted
-
-def encrypt(str, rot):
-    encrypted = ''
-    for c in str:
-        if c.isalpha():
-            if c.isupper():
-                limit = ord('A')
-            else:
-                limit = ord('a')
-            encrypted += shift(c, rot, limit, False)
-        else:
-            encrypted += c
-
-    return encrypted
+    return result
 
 def index(request):
     if request.method == "POST":
@@ -77,16 +73,15 @@ def index(request):
 
         if not errors:
             rotn = rot % 26 # 26 - length of latin alphabet
-            output_text = ''
 
             if data.has_key("crypt") and data["crypt"] is not None:
-                output_text = crypt(data['input-text'], rotn)
+                crypt = True
                 result_dict["crypt"] = data['crypt']
             elif data.has_key("encrypt") and data["encrypt"] is not None:
-                output_text = encrypt(data['input-text'], rotn)
+                crypt = False
                 result_dict["encrypt"] = data['encrypt']
 
-            result_dict["output_text"] = output_text
+            result_dict["output_text"] = allcrypt(data['input-text'], rotn, crypt)
 
             return JsonResponse(result_dict, safe=False)
         else: # if there are errors
