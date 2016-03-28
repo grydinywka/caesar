@@ -3,19 +3,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 
-def is_alpha(c):
-    c = ord(c)
-    if ord('A') <= c and c <= ord('Z'):
-        return True
-    if ord('a') <= c and c <= ord('z'):
-        return True
-    return False
-
-def is_upper(c):
-    if ord(c) <= ord('Z'):
-        return True # If ord('A') <= ord(c) and ord(c) <= ord('Z')
-    return False # If ord('a') <= ord(c) and ord(c) <= ord('z')
-
 def shift(c, rot, limit, isCrypte):
     lenLatin = 26
     c = ord(c)
@@ -32,8 +19,8 @@ def shift(c, rot, limit, isCrypte):
 def crypt(str, rot):
     crypted = ''
     for c in str:
-        if is_alpha(c):
-            if is_upper(c):
+        if c.isalpha():
+            if c.isupper():
                 limit = ord('Z')
             else:
                 limit = ord('z')
@@ -47,8 +34,8 @@ def crypt(str, rot):
 def encrypt(str, rot):
     encrypted = ''
     for c in str:
-        if is_alpha(c):
-            if is_upper(c):
+        if c.isalpha():
+            if c.isupper():
                 limit = ord('A')
             else:
                 limit = ord('a')
