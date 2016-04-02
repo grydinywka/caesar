@@ -20,6 +20,7 @@ from caesarapp import views
 urlpatterns = [
     # index page
     url(r'^$', views.index, name='index'),
+    url(r'^second/$', views.second, name='second'),
 
     # admin page
     url(r'^admin/', include(admin.site.urls)),

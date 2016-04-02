@@ -111,11 +111,11 @@ function countChars(inpdata) {
   return json;
 }
 
-function ajax_eng_words(type, url, success){
+function ajax_eng_words(type, url, textdata, success){
     $.ajax({
         type:type,
         url:url,
-        dataType:"text",
+        dataType:"json",
         restful:true,
         cache:false,
         timeout:20000,
@@ -127,85 +127,23 @@ function ajax_eng_words(type, url, success){
         error:function(data){
             alert("Error In Connecting");
             return false;
+        },
+        data: {
+            'ajax-msg': 'is_rot',
+            'textdata': textdata,
+            'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
         }
     });
 }
 
-function stripchars(string) {
-    string = string.replace(RegExp('[^a-z ]','g'), ' ');
-    string = string.replace(RegExp(' {2,}','g'), ' ');
-    string = string.replace(RegExp('^ ','g'), '');
-    string = string.replace(RegExp(' $','g'), '');
-    return string;
-}
-
-function encrypt(str, rot) { // this func is only for the file
-    var encrypted = "";
-
-    for (var i = 0; i < str.length; i++) {
-        var shift = str.charCodeAt(i) - rot;
-        if ( shift < 97 )
-            shift += 26;
-        encrypted += String.fromCharCode(shift);
-    }
-
-    return encrypted;
-}
-
 function infoMessage(textdata) { // textdata - data from input field
-    url='/static/txt/wordsEn.txt';
-    ajax_eng_words('GET',url, function(data){ // data - string of English words
-
-        var inpdata = textdata.toLowerCase(); //
-
-        inpdata = stripchars(inpdata); // delete all chars exclude latins and spaces
-        inpdata = inpdata.split(' '); // array of input words
-        if ( inpdata.length > 200)
-            inpdata.length = 200
-
-//--------------------------------------------------------------------
-// Check if input data is valid words
-        var counter = 0;
-        for ( var i = 0; i < inpdata.length; i++ ) {
-            var patt = new RegExp('\\s'+inpdata[i]+'\\s', 'g');
-            if ( patt.test(data) )
-                counter += 1;
-        }
-        if (inpdata == '')
-            $('#info-msg div div').html("Неможливо розшифрувати");
-        else if (counter == inpdata.length) {
-            $('#info-msg div div').html('<p>Введений текст незашифрований! Кожне слово міститься в англійському\
-            словнику.</p>');
-        } else {
-            var flagRot = 0;
-            for ( var rot = 1; rot < 26; rot++ ) { // rot = i
-                var counter2 = 0;
-                for ( var i = 0; i < inpdata.length; i++ ) {
-                    var word = encrypt(inpdata[i], rot);
-                    var patt = new RegExp('\\s'+word+'\\s', 'g');
-
-                    if ( patt.test(data) )
-                        counter2 += 1;
-                }
-
-                if (counter2 == inpdata.length) { // if encrypted is in Eng dict
-                    flagRot = rot;
-                    rot = 26; // exit from loop
-                }
-            }
-
-            if ( flagRot != 0 ) {
-                $('#info-msg div div').html('Введений текст Зашифрований в ROT ' + flagRot );
-            } else {
-                $('#info-msg div div').html('Введений текст або містись помилки, або зашифрований не шифром Цезаря,\
-                або деякі слова не є словами англійської мови, або містить власні назви!');
-            }
-        }
+    url='/';
+    ajax_eng_words('POST', url, textdata, function(data){ // data - string of English words
+        $('#info-msg div div').html(data.result);
         $('#info-msg').show();
 
     });
 }
-
 
 $(document).ready(function (){
     ajax_data_post_json();

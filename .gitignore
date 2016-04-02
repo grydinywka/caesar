@@ -6,3 +6,5 @@
 /caesarapp/static/txt/json.txt
 /caesarapp/static/txt/example.txt
 /caesarapp/static/txt/json.js
+
+toRedis.py
