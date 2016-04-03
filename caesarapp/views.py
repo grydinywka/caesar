@@ -112,7 +112,8 @@ def index(request):
 
             textdata = data['textdata'] # get data from input-text
             textdata = textdata.lower()
-            textdata = [item.strip(string.punctuation) for item in textdata.split()] # now textdata - is list of input words
+            punctuation = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~'
+            textdata = [item.strip(punctuation) for item in textdata.split()] # now textdata - is list of input words
 
             counter_word = 0
             for item in textdata:

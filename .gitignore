@@ -8,5 +8,5 @@
 /caesarapp/static/txt/json.js
 
 toRedis.py
-words.txt
+wordsEn.txt
 redis_on_heroku.txt
