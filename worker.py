@@ -13,6 +13,5 @@ if __name__ == '__main__':
     #     worker = Worker(map(Queue, listen))
     #     worker.work()
     with open('./caesarapp/static/txt/wordsEn.txt', 'r') as en_words_file:
-        # for line in en_words_file:
-        #     conn.sadd('setEn', line.strip())
-        pass
+        for line in en_words_file:
+            conn.sadd('setEn', line.strip())
