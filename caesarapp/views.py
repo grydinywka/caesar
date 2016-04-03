@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import redis
+import os, redis
 
 from django.shortcuts import render
 from django.http import JsonResponse
@@ -103,7 +103,10 @@ def index(request):
         # If it is request during outfocus from input-text
         if data.has_key('ajax-msg'):
             import string
-            r = redis.StrictRedis(host='localhost', port=6379, db=0)
+            # r = redis.StrictRedis(host='localhost', port=6379, db=0)
+            # redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379')
+            redis_url = os.environ.get('REDIS_URL', 'redis://localhost:6379')
+            r = redis.from_url(redis_url)
 
             res_string = 'res_string'
 
