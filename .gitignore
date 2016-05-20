@@ -10,3 +10,4 @@
 toRedis.py
 redis_on_heroku.txt
 reports
+staticfiles

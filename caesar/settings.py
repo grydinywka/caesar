@@ -84,6 +84,10 @@ DATABASES = {
         'PASSWORD': 'caesar_db_user',
         'HOST': 'localhost',
         'PORT': '',
+        'TEST': {
+            'CHARSET': 'utf8',
+            'COLLATION': 'utf8_general_ci',
+        }
     }
 }
 
@@ -130,7 +134,7 @@ USE_TZ = True
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'caesarapp', 'static'),
 )
 
 # Simplified static file serving.
@@ -153,3 +157,5 @@ CACHES = {
          }
     }
 }
+
+PROJECT_APPS = ('caesarapp',)
