@@ -82,3 +82,21 @@ class TestCrypt(TestCase):
         self.assertEqual(response.json()['input_text'], u'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG')
         self.assertEqual(response.json()['rot'], -3)
         self.assertEqual(response.json()['crypt'], u'1')
+
+        # check big data to crypt
+        simpletext = open('caesarapp/static/txt/copperfield.txt', 'r')
+        crypttext = open('caesarapp/static/txt/copperfield_rot2.txt', 'r')
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': simpletext.read(),
+                'rot': '2',
+                'crypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], crypttext.read())
+        simpletext.seek(0)
+        self.assertEqual(response.json()['input_text'], simpletext.read())
+        self.assertEqual(response.json()['rot'], 2)
+        self.assertEqual(response.json()['crypt'], u'1')
