@@ -14,7 +14,7 @@ class TestCrypt(TestCase):
     def test_form(self):
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, 900)
+        self.assertEqual(response.status_code, 200)
 
         # check page title, few field titles on edit form
         self.assertIn(u'Зашифрувати', response.content)
