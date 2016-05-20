@@ -86,6 +86,7 @@ def index(request):
             if not errors:
                 rotn = rot % 26 # 26 - length of latin alphabet
 
+                crypt = True
                 if data.has_key("crypt") and data["crypt"] is not None:
                     crypt = True
                     result_dict["crypt"] = data['crypt']
