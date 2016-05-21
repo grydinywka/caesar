@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
+from django.test import TestCase, Client
+from django.core.urlresolvers import reverse
+
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-from django.test import TestCase, Client
-from django.core.urlresolvers import reverse
 
 class TestCrypt(TestCase):
     def setUp(self):
@@ -68,21 +69,6 @@ class TestCrypt(TestCase):
         self.assertEqual(response.json()['rot'], 29)
         self.assertEqual(response.json()['crypt'], u'1')
 
-        # check negative rotate
-        response = self.client.post(
-            self.url,
-            {
-                'input-text': u'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG',
-                'rot': '-3',
-                'crypt': '1'
-            }
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['output_text'], u'QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD')
-        self.assertEqual(response.json()['input_text'], u'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG')
-        self.assertEqual(response.json()['rot'], -3)
-        self.assertEqual(response.json()['crypt'], u'1')
-
         # check big data to crypt
         simpletext = open('caesarapp/static/txt/copperfield.txt', 'r')
         crypttext = open('caesarapp/static/txt/copperfield_rot2.txt', 'r')
@@ -131,6 +117,21 @@ class TestCrypt(TestCase):
         self.assertEqual(response.json()['rot'], 33)
         self.assertEqual(response.json()['crypt'], u'1')
 
+        # check negative rotate
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': u'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG',
+                'rot': '-3',
+                'crypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD')
+        self.assertEqual(response.json()['input_text'], u'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG')
+        self.assertEqual(response.json()['rot'], -3)
+        self.assertEqual(response.json()['crypt'], u'1')
+
         # check no rotation
         response = self.client.post(
             self.url,
@@ -175,4 +176,153 @@ class TestCrypt(TestCase):
         self.assertEqual(response.json()['rot'], 0)
         self.assertEqual(response.json()['crypt'], u'1')
 
+    def test_encrypt_post(self):
+        # check simple encryption
+        response = self.client.post(self.url, {
+            'input-text': 'Oa pcog!',
+            'rot': '2',
+            'encrypt': '1'
+            })
 
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'My name!')
+        self.assertEqual(response.json()['input_text'], u'Oa pcog!')
+        self.assertEqual(response.json()['rot'], 2)
+        self.assertEqual(response.json()['encrypt'], u'1')
+
+        # check unicode
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': u'Стовідсотковий спирт',
+                'rot': '29',
+                'encrypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'Стовідсотковий спирт')
+        self.assertEqual(response.json()['input_text'], u'Стовідсотковий спирт')
+        self.assertEqual(response.json()['rot'], 29)
+        self.assertEqual(response.json()['encrypt'], u'1')
+
+        # check unicode-latin mix
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': u'Zlqh lv qrw ehhu! Стовідсотковий спирт',
+                'rot': '29',
+                'encrypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'Wine is not beer! Стовідсотковий спирт')
+        self.assertEqual(response.json()['input_text'], u'Zlqh lv qrw ehhu! Стовідсотковий спирт')
+        self.assertEqual(response.json()['rot'], 29)
+        self.assertEqual(response.json()['encrypt'], u'1')
+
+        # check big data to encrypt
+        simpletext = open('caesarapp/static/txt/copperfield.txt', 'r')
+        crypttext = open('caesarapp/static/txt/copperfield_rot2.txt', 'r')
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': crypttext.read(),
+                'rot': '2',
+                'encrypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], simpletext.read())
+        crypttext.seek(0)
+        self.assertEqual(response.json()['input_text'], crypttext.read())
+        self.assertEqual(response.json()['rot'], 2)
+        self.assertEqual(response.json()['encrypt'], u'1')
+
+        # check no text-input
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': '',
+                'rot': '33',
+                'encrypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'')
+        self.assertEqual(response.json()['errors']['input_text'], u'Текст для шифрування/дешифрування є обов’язковим!')
+        self.assertEqual(response.json()['rot'], 33)
+        self.assertEqual(response.json()['encrypt'], u'1')
+
+        # check one character text-input
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': 'N',
+                'rot': '33',
+                'encrypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'G')
+        self.assertEqual(response.json()['input_text'], u'N')
+        self.assertEqual(response.json()['rot'], 33)
+        self.assertEqual(response.json()['encrypt'], u'1')
+
+        # check negative rotate
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': u'QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD',
+                'rot': '-3',
+                'encrypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG')
+        self.assertEqual(response.json()['input_text'], u'QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD')
+        self.assertEqual(response.json()['rot'], -3)
+        self.assertEqual(response.json()['encrypt'], u'1')
+
+        # check no rotation
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': 'Hello, Babby!',
+                'rot': '',
+                'encrypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'')
+        self.assertEqual(response.json()['errors']['rot'], u'Зміщення є обов’язковим!')
+        self.assertEqual(response.json()['encrypt'], u'1')
+
+        # check one rotation
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': 'Ifmmp, Cbccz!',
+                'rot': '1',
+                'encrypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'Hello, Babby!')
+        self.assertEqual(response.json()['input_text'], u'Ifmmp, Cbccz!')
+        self.assertEqual(response.json()['rot'], 1)
+        self.assertEqual(response.json()['encrypt'], u'1')
+
+        # check zero rotation
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': 'Hello, Babby!',
+                'rot': '0',
+                'encrypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'Hello, Babby!')
+        self.assertEqual(response.json()['input_text'], u'Hello, Babby!')
+        self.assertEqual(response.json()['rot'], 0)
+        self.assertEqual(response.json()['encrypt'], u'1')
