@@ -83,17 +83,15 @@ def index(request):
 
             result_dict["output_text"] = ''
 
+            if data.has_key("crypt") and data["crypt"] is not None:
+                crypt = True
+                result_dict["crypt"] = data['crypt']
+            elif data.has_key("encrypt") and data["encrypt"] is not None:
+                crypt = False
+                result_dict["encrypt"] = data['encrypt']
+
             if not errors:
                 rotn = rot % 26 # 26 - length of latin alphabet
-
-                crypt = True
-                if data.has_key("crypt") and data["crypt"] is not None:
-                    crypt = True
-                    result_dict["crypt"] = data['crypt']
-                elif data.has_key("encrypt") and data["encrypt"] is not None:
-                    crypt = False
-                    result_dict["encrypt"] = data['encrypt']
-
                 result_dict["output_text"] = allcrypt(data['input-text'], rotn, crypt)
 
                 return JsonResponse(result_dict, safe=False)

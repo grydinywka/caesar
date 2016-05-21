@@ -100,3 +100,79 @@ class TestCrypt(TestCase):
         self.assertEqual(response.json()['input_text'], simpletext.read())
         self.assertEqual(response.json()['rot'], 2)
         self.assertEqual(response.json()['crypt'], u'1')
+
+        # check no text-input
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': '',
+                'rot': '33',
+                'crypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'')
+        self.assertEqual(response.json()['errors']['input_text'], u'Текст для шифрування/дешифрування є обов’язковим!')
+        self.assertEqual(response.json()['rot'], 33)
+        self.assertEqual(response.json()['crypt'], u'1')
+
+        # check one character text-input
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': 'G',
+                'rot': '33',
+                'crypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'N')
+        self.assertEqual(response.json()['input_text'], u'G')
+        self.assertEqual(response.json()['rot'], 33)
+        self.assertEqual(response.json()['crypt'], u'1')
+
+        # check no rotation
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': 'Hello, Babby!',
+                'rot': '',
+                'crypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'')
+        self.assertEqual(response.json()['errors']['rot'], u'Зміщення є обов’язковим!')
+        self.assertEqual(response.json()['crypt'], u'1')
+
+        # check one rotation
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': 'Hello, Babby!',
+                'rot': '1',
+                'crypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'Ifmmp, Cbccz!')
+        self.assertEqual(response.json()['input_text'], u'Hello, Babby!')
+        self.assertEqual(response.json()['rot'], 1)
+        self.assertEqual(response.json()['crypt'], u'1')
+
+        # check zero rotation
+        response = self.client.post(
+            self.url,
+            {
+                'input-text': 'Hello, Babby!',
+                'rot': '0',
+                'crypt': '1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['output_text'], u'Hello, Babby!')
+        self.assertEqual(response.json()['input_text'], u'Hello, Babby!')
+        self.assertEqual(response.json()['rot'], 0)
+        self.assertEqual(response.json()['crypt'], u'1')
+
+
