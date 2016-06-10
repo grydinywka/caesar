@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'caesarapp',
     'django_jenkins',
-    # 'django_coverage',
+    'django_coverage',
 ]
 
 MIDDLEWARE_CLASSES = [
