@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'caesarapp',
     'django_jenkins',
+    # 'django_coverage',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -119,8 +120,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'uk-Uk'
 
-TIME_ZONE = 'Europe/Zaporozhye'
-
+# TIME_ZONE = 'Europe/Zaporozhye'
+TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_L10N = True
@@ -159,3 +160,11 @@ CACHES = {
 }
 
 PROJECT_APPS = ('caesarapp',)
+
+JENKINS_TASKS = (
+    'django_jenkins.tasks.run_pylint',
+    'django_jenkins.tasks.run_pep8',
+    'django_jenkins.tasks.run_pyflakes',
+    # 'django_jenkins.tasks.with_coverage',
+    'django_jenkins.tasks.django_tests',
+)

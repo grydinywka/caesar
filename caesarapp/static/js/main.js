@@ -7,7 +7,7 @@ function ajax_data_post_json() {
 
             },
 			'error': function(){
-				alert('Error on server. Attempt later, please!');
+				alert(gettext('Error on server. Attempt later, please!'));
 
 				return false;
 			},

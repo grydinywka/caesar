@@ -16,11 +16,17 @@ Including another URLconf
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from caesarapp import views
+from django.views.i18n import javascript_catalog
+
+js_info_dict = {
+    'packages': ('caesarapp',),
+}
 
 urlpatterns = [
     # index page
     url(r'^$', views.index, name='index'),
     url(r'^second/$', views.second, name='second'),
+    url(r'^jsi18n\.js$', javascript_catalog, js_info_dict, name='jsi18n'),
 
     # admin page
     url(r'^admin/', include(admin.site.urls)),
