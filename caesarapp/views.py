@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
-
 import os, redis
 
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.utils.translation import ugettext as _
 
 def is_alpha(c):
     c = ord(c)
@@ -65,20 +64,20 @@ def index(request):
             # Validate input-text field
             input_text = data.has_key('input-text') and data["input-text"] or ''
             if not input_text:
-                errors['input_text'] = u'Текст для шифрування/дешифрування є обов’язковим!'
+                errors['input_text'] = _(u'Text is required!')
             else:
                 result_dict['input_text'] = data['input-text']
 
             # Validate rotate field
             rot = data.has_key('rot') and data['rot'] or ''
             if not rot:
-                errors['rot'] = u'Зміщення є обов’язковим!'
+                errors['rot'] = _(u'Bias is required!')
             # elif date is not integer or is not number
             else:
                 try:
                     rot = int(rot)
                 except Exception:
-                    errors['rot'] = u'Невірне значення зміщення! Введіть ціле число!'
+                    errors['rot'] = _(u'Incorrect bias! Type integer!')
                 result_dict['rot'] = rot
 
             result_dict["output_text"] = ''
@@ -123,7 +122,7 @@ def index(request):
             if length_of_data == 0:
                 res_string = False
             elif counter_word == length_of_data:
-                res_string = u"Це незашифрований текст! Кожне слово є словом англійської мови."
+                res_string = _(u"It isn't encrypted text! Every word is word of English language.")
             elif counter_word == 0:
                 rotate = getRot(textdata[0], r)
                 if rotate > 0: # if word is crypted
@@ -135,14 +134,15 @@ def index(request):
                             count_crypted += 1
                         i += 1
                     if count_crypted == length_of_data:
-                        res_string = u"Текст зашифровано в ROT{}".format(rotate)
+                        res_string = _(u"Text encrypted in ROT{}").format(rotate)
                     else:
-                        res_string = u"{} слів зашифровано в ROT{}, решта або мають помилки, або зашифровані " \
-                                     u"по-іншому.".format(count_crypted, rotate)
+                        res_string = _(u"{} words encrypted in ROT{}, rest or have errors, "\
+                                       u"or encrypted " \
+                                     u"in other way").format(count_crypted, rotate)
                 else:
-                    res_string = u"Не вдається визначити шифрування цього тексту!"
+                    res_string = _(u"Unable to determine the encryption of the text!")
             else: # 0 < counter_word < length_of_data
-                res_string = u"Введений текст містить {} слів, решти {} немає в словнику англ. мови.".format(
+                res_string = _(u"Typed text consist of {} words, rest {} - not in the dictionary.").format(
                     counter_word, length_of_data - counter_word)
 
             return JsonResponse({'result': res_string}, safe=False)

@@ -16,7 +16,7 @@ function ajax_data_post_json() {
                 var rotate_error = $('#rot-error');
 
                 if ('errors' in data) {
-                    $('#status_msg').show().html('Помилки валідації! Виправте їх!.');
+                    $('#status_msg').show().html(gettext('Validation errors! Correct them!'));
                     if ('input_text' in data.errors) {
                         input_error.html(data.errors.input_text);
                         input_error.parent().addClass('has-error');
@@ -42,11 +42,11 @@ function ajax_data_post_json() {
 
 
                 if ('crypt' in data) {
-                    $("#result-field").html('Результат: Зашифрований текст');
+                    $("#result-field").html(gettext('Result: Encrypted text'));
                 } else if ('encrypt' in data) {
-                    $("#result-field").html('Результат: Розшифрований текст');
+                    $("#result-field").html(gettext('Result: Decrypted text'));
                 } else {
-                    $("#result-field").html('Результат');
+                    $("#result-field").html(gettext('Result'));
                 }
 
                 $("textarea[name='output-text']").html(data.output_text);
@@ -61,8 +61,8 @@ function charts(data,ChartType){
     google.load("visualization", "1", {packages:["corechart"], callback: drawVisualization});
     function drawVisualization(){
         var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Літера');
-        data.addColumn('number', 'Кількіть літер');
+        data.addColumn('string', gettext('Letter'));
+        data.addColumn('number', gettext('Quantity of the same letters'));
         $.each(jsonData, function(i,jsonData){
             if (jsonData != undefined) {
                 var value=jsonData.value;
@@ -72,7 +72,7 @@ function charts(data,ChartType){
         });
 
         var options = {
-        title : "Частота кожного введеного символу в тексті.",
+        title : gettext("Frequency of every typed character in text."),
         colorAxis: {colors: ['#54C492', '#cc0000']},
         datalessRegionColor: '#dedede',
         defaultColor: '#dedede'

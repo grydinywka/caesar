@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-28 16:42+0000\n"
+"POT-Creation-Date: 2016-06-25 06:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,3 +22,31 @@ msgstr ""
 #: static/js/main.js:10
 msgid "Error on server. Attempt later, please!"
 msgstr "Помилка серверу. Спробуйте будь-ласка пізніше!"
+
+#: static/js/main.js:19
+msgid "Validation errors! Correct them!"
+msgstr "Помилка валідації! Виправте їх!"
+
+#: static/js/main.js:45
+msgid "Result: Encrypted text"
+msgstr "Результат: зашифрований текст"
+
+#: static/js/main.js:47
+msgid "Result: Decrypted text"
+msgstr "Результат: розшифрований текст"
+
+#: static/js/main.js:49
+msgid "Result"
+msgstr "Результат"
+
+#: static/js/main.js:64
+msgid "Letter"
+msgstr "Літера"
+
+#: static/js/main.js:65
+msgid "Quantity of the same letters"
+msgstr "Число символів"
+
+#: static/js/main.js:75
+msgid "Frequency of every typed character in text."
+msgstr "Частота кожного введеного символу."

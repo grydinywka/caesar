@@ -1,0 +1,137 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-06-25 06:02+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: templates/index.html:9 templates/index.html.py:11 templates/index.html:27
+msgid "Service encryption / decryption"
+msgstr ""
+
+#: templates/index.html:34
+msgid "Encryption is go on by "
+msgstr ""
+
+#: templates/index.html:35
+msgid "Caesar cipher"
+msgstr ""
+
+#: templates/index.html:36
+msgid "integer bias"
+msgstr ""
+
+#: templates/index.html:37
+msgid ""
+"The service allows you to encrypt text with Latin letters. Rest characters "
+"remain unchanged."
+msgstr ""
+
+#: templates/index.html:40
+msgid "From left to enter your text for the job. Then enter bias in ROT field."
+msgstr ""
+
+#: templates/index.html:41
+msgid "Push &ldquo;Encrypt&rdquo; or &ldquo;Decrypt&rdquo;."
+msgstr ""
+
+#: templates/index.html:42
+msgid "In right field will be encrypted or decrypted\ttext."
+msgstr ""
+
+#: templates/index.html:45
+msgid "After typing and "
+msgstr ""
+
+#: templates/index.html:46
+msgid "defocused"
+msgstr ""
+
+#: templates/index.html:47
+msgid " appear chart of quantitative characterization every typed character."
+msgstr ""
+
+#: templates/index.html:48
+msgid "Below will be hint about encryption if text is a valid English."
+msgstr ""
+
+#: templates/index.html:63
+msgid "Text for encryption/decryption"
+msgstr ""
+
+#: templates/index.html:66
+msgid "Type text"
+msgstr ""
+
+#: templates/index.html:71
+msgid "bias"
+msgstr ""
+
+#: templates/index.html:78
+msgid "Encrypt"
+msgstr ""
+
+#: templates/index.html:80
+msgid "Decrypt"
+msgstr ""
+
+#: templates/index.html:85 templates/index.html.py:88
+msgid "Result"
+msgstr ""
+
+#: templates/index.html:107
+msgid "Info!"
+msgstr ""
+
+#: templates/index.html:107
+msgid " about encryption: "
+msgstr ""
+
+#: templates/index.html:116
+msgid "Cryption and decryption by Caesar"
+msgstr ""
+
+#: views.py:67
+msgid "Text is required!"
+msgstr ""
+
+#: views.py:74
+msgid "Bias is required!"
+msgstr ""
+
+#: views.py:80
+msgid "Incorrect bias! Type integer!"
+msgstr ""
+
+#: views.py:125
+msgid "It isn't encrypted text! Every word is word of English language."
+msgstr ""
+
+#: views.py:137
+msgid "Text encrypted in ROT{}"
+msgstr ""
+
+#: views.py:139
+msgid ""
+"{} words encrypted in ROT{}, rest or have errors, or encrypted in other way"
+msgstr ""
+
+#: views.py:143
+msgid "Unable to determine the encryption of the text!"
+msgstr ""
+
+#: views.py:145
+msgid "Typed text consist of {} words, rest {} - not in the dictionary."
+msgstr ""

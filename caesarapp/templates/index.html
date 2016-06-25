@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load static from staticfiles %}
 
 <!DOCTYPE html>
@@ -5,9 +6,9 @@
 
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Система шифрування і дешифрування</title>
+		<title>{% trans "Service encryption / decryption" %}</title>
 		<meta name="description"
-			  value="Система шифрквання і дешифрування" />
+			  value={% trans "Service encryption / decryption" %} />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 		<!-- Style Section -->
@@ -23,25 +24,28 @@
 			<!-- Start Legend -->
 			<div class="row" id="header">
 				<div class="col-xs-12">
-					<h1>Сервіс шифрування-дешифрування</h1>
+					<h1>{% trans "Service encryption / decryption" %}</h1>
 
 					<div class="alert alert-warning" id="status_msg" role="alert"></div>
 
                     <div class="well">
-                        <p>Шифрування і зворотній процес, дешифрування, проводиться <a href="https://en.wikipedia.org/wiki/Caesar_cipher">шифром Цезаря</a> (ROTN).
-					    <span class="important">N</span> - зміщення, <span class="important">ціле</span> число.
-							Даний
-							сервіс дозволяє проводити
-						шифрування латиниці. Інші символи лишаються без змін.
+                        <!--<p>Шифрування і зворотній процес, дешифрування, проводиться <a href="https://en.wikipedia.org/wiki/Caesar_cipher">шифром Цезаря</a> (ROTN).-->
+                        <p>
+							{% trans "Encryption is go on by " %}
+							<a href='https://en.wikipedia.org/wiki/Caesar_cipher'>{% trans "Caesar cipher" %}</a> (ROTN).
+					    	<span class='important'>N  - {% trans "integer bias" %}</span>.
+							{% trans "The service allows you to encrypt text with Latin letters. Rest characters remain unchanged." %}
 					    </p>
-                        <p>Зліва введіть ваш текст для роботи. Далі в полі ROT введіть зміщення. І натисніть
-                        кнопку "Зашифрувати" або "Розшифрувати". В полі справа з’явиться зашифрований або
-                            розрифрований текст.</p>
-						<p>Після введення тексту і <span class="important">дефокусування</span> з’явиться
-							діаграма, що
-							покаже кількісну характеристику
-							кожного	введеного символу у	тексті. Під діаграмою з’явиться
-							підказка стосовно шифрування тексту.
+                        <p>
+							{% trans "From left to enter your text for the job. Then enter bias in ROT field." %}
+							{% trans "Push &ldquo;Encrypt&rdquo; or &ldquo;Decrypt&rdquo;." %}
+							{% trans "In right field will be encrypted or decrypted	text." %}
+						</p>
+						<p>
+							{% trans "After typing and " %}<span class="important">
+							{% trans "defocused" %}</span>
+							{% trans " appear chart of quantitative characterization every typed character." %}
+							{% trans "Below will be hint about encryption if text is a valid English." %}
 						</p>
                     </div>
 				</div>
@@ -55,31 +59,33 @@
 
 					<div class="col-xs-5">
 						<span id="input-text-error" class="help-block"></span>
-                        <label for="input-text" class="control-label">Текст для шифрування/дешифрування*</label>
+                        <label for="input-text" class="control-label">
+							{% trans "Text for encryption/decryption" %}*
+						</label>
 						<textarea name="input-text" id="input-text" rows="10" class="form-control"
-								  placeholder="Введіть текст для шифрування/дешифрування"></textarea>
+								  placeholder="{% trans 'Type text' %}"></textarea>
 					</div>
 
 					<div class="col-xs-2" id="buttons">
 						<span id="rot-error" class="help-block"></span>
-						<div><label for="rot" class="control-label">Зміщення*</label></div>
+						<div><label for="rot" class="control-label">{% trans "bias" %}*</label></div>
 						<div class="input-group input-group-sm">
 							<span for="rot" class="input-group-addon sizing-addon3">ROT*</span>
 							<input type="text" class="form-control" placeholder="N"
 								 value="" name="rot" id="rot"
 								 aria-describedby="sizing-addon3">
 						</div>
-						<input type="submit" value="Зашифрувати" name="crypt"
+						<input type="submit" value="{% trans 'Encrypt' %}" name="crypt"
 							   class="btn btn-danger btn-sm"/>
-						<input type="submit" value="Розшифрувати" name="encrypt"
+						<input type="submit" value="{% trans 'Decrypt' %}" name="encrypt"
 							   class="btn btn-success btn-sm"/>
 					</div>
 
 					<div class="col-xs-5">
-                        <label class="control-label" id="result-field">Результат</label>
+                        <label class="control-label" id="result-field">{% trans "Result" %}</label>
 						<span id="output-text-error" class="help-block"></span>
 						<textarea readonly="readonly" name="output-text" id="output-text" rows="10" class="form-control"
-								  placeholder="Результат"></textarea>
+								  placeholder="{% trans 'Result' %}"></textarea>
 					</div>
 				</form>
 			</div>
@@ -98,7 +104,7 @@
 				<div class="col-xs-12">
 
                     <div class="alert alert-info">
-                        <strong>Info!</strong> Порада стосовно шифрування.
+                        <strong>{% trans 'Info!' %}</strong>{% trans " about encryption: " %}
                     </div>
 				</div>
 			</div>
@@ -107,7 +113,7 @@
 			<!-- Start Footer -->
 			<div class="row" id="footer">
 				<div class="col-xs-12">
-					&copy; 2016 Шифрування і дешифрування Цезаря
+					&copy; 2016 {% trans "Cryption and decryption by Caesar" %}
 				</div>
 			</div>
 			<!-- End Footer -->
