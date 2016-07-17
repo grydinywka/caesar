@@ -151,3 +151,6 @@ def index(request):
 
 def second(request):
     return JsonResponse({'result': 'result_dict'}, safe=False)
+    
+def diagr(request):
+	return render(request, 'diagr.html', {})

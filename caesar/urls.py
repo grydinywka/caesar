@@ -26,6 +26,7 @@ urlpatterns = [
     # index page
     url(r'^$', views.index, name='index'),
     url(r'^second/$', views.second, name='second'),
+    url(r'^diagr/$', views.diagr, name='diagr'),
     url(r'^jsi18n\.js$', javascript_catalog, js_info_dict, name='jsi18n'),
 
     # admin page
